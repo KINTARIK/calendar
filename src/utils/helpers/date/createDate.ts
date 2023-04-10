@@ -23,7 +23,7 @@ export const createDate = (params?:CreateDateParams) => {
     const week = getWeekNumber(d);
 
     return{
-        d,
+        date: d,
         dayNumber,
         day,
         dayNumberInWeek,
