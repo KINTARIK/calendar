@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { checkDateIsEqual, checkIsToday } from '../../utils/helpers/date';
-import { useCalendar } from '../hooks/useCalendar';
+import { useCalendar } from './hooks/useCalendar';
 
 import './Calendar.css';
 
@@ -9,19 +9,19 @@ interface CalendarProps {
   locale?: string;
   selectedDate: Date;
   selectDate: (date: Date) => void;
-  firstWeekDay?: number;
+  firstWeekDayNumber?: number;
 }
 
 export const Calendar: React.FC<CalendarProps> = ({
   locale = 'default',
   selectedDate: date,
   selectDate,
-  firstWeekDay = 2
+  firstWeekDayNumber = 2
 }) => {
   const { functions, state } = useCalendar({
     locale,
     selectedDate: date,
-    firstWeekDay
+    firstWeekDayNumber
   });
 
   return (
@@ -44,8 +44,8 @@ export const Calendar: React.FC<CalendarProps> = ({
         )}
         {state.mode === 'years' && (
           <div>
-            {state.selectedYearInterval[0]} -{' '}
-            {state.selectedYearInterval[state.selectedYearInterval.length - 1]}
+            {state.selectedYearsInterval[0]} -{' '}
+            {state.selectedYearsInterval[state.selectedYearsInterval.length - 1]}
           </div>
         )}
         <div
@@ -65,7 +65,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             <div className='calendar__days'>
               {state.calendarDays.map((day) => {
                 const isToday = checkIsToday(day.date);
-                const isSelectedDay = checkDateIsEqual(day.date, state.selectedDate.date);
+                const isSelectedDay = checkDateIsEqual(day.date, state.selectedDay.date);
                 const isAdditionalDay = day.monthIndex !== state.selectedMonth.monthIndex;
 
                 return (
@@ -122,8 +122,8 @@ export const Calendar: React.FC<CalendarProps> = ({
 
         {state.mode === 'years' && (
           <div className='calendar__pick__items__container'>
-            <div className='calendar__unchoosable__year'>{state.selectedYearInterval[0] - 1}</div>
-            {state.selectedYearInterval.map((year) => {
+            <div className='calendar__unchoosable__year'>{state.selectedYearsInterval[0] - 1}</div>
+            {state.selectedYearsInterval.map((year) => {
               const isCurrentYear = new Date().getFullYear() === year;
               const isSelectedYear = year === state.selectedYear;
 
@@ -146,7 +146,7 @@ export const Calendar: React.FC<CalendarProps> = ({
               );
             })}
             <div className='calendar__unchoosable__year'>
-              {state.selectedYearInterval[state.selectedYearInterval.length - 1] + 1}
+              {state.selectedYearsInterval[state.selectedYearsInterval.length - 1] + 1}
             </div>
           </div>
         )}
@@ -154,5 +154,3 @@ export const Calendar: React.FC<CalendarProps> = ({
     </div>
   );
 };
-
-export default Calendar;
